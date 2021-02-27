@@ -24,6 +24,8 @@ app.get("/", (req, res) => {
   res.render("homepage");
 });
 
+app.get("/login", (req, res) => {});
+
 app.listen(port, () => {
   console.log("servin runnin WILD");
 });
