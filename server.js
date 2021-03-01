@@ -22,7 +22,7 @@ const findUser = async (name) =>
   await db.user.findOne({ where: { username: name } });
 
 const sessionChecker = (req, res, next) => {
-  if (!req.session.user) {
+  if (!req.session.id) {
     return res.json("Must be logged in to view page");
   } else {
     next();
@@ -54,9 +54,12 @@ app.engine(
 
 app.use(express.static(__dirname + "/public"));
 
-app.get("/", sessionChecker, (req, res) => {
-  console.log("hit homepage");
-  res.render("homepage");
+app.get("/", async (req, res) => {
+  let patterns = await db.user.findAll({
+    where: { id: req.session.id },
+    include: [{ model: db.pattern }],
+  });
+  return res.status(200).json(patterns);
 });
 
 app.post("/login", async (req, res) => {
@@ -71,7 +74,8 @@ app.post("/login", async (req, res) => {
     let pass_parts = pWord.split("$");
     let encryptedPass = encryptPassword(req.body.password, pass_parts[1]);
     if (encryptedPass == pWord) {
-      req.session.user = user;
+      req.session.id = foundUser.id;
+      console.log(session);
       return res.json(`Correct password! welcome ${user}`);
     } else {
       return res.status(400).json("Wrong Password");
