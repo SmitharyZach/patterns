@@ -21,6 +21,8 @@ const encryptPassword = (word, pass_salt) => {
 const findUser = async (name) =>
   await db.user.findOne({ where: { username: name } });
 
+const findUserById = async (id) => await db.user.findOne({ where: { id: id } });
+
 const sessionChecker = (req, res, next) => {
   if (!req.session.id) {
     return res.json("Must be logged in to view page");
@@ -55,11 +57,16 @@ app.engine(
 app.use(express.static(__dirname + "/public"));
 
 app.get("/", async (req, res) => {
-  let patterns = await db.user.findAll({
-    where: { id: req.session.id },
-    include: [{ model: db.pattern }],
+  const user = await findUserById(1);
+  const patterns = await db.pattern.findAll({
+    where: {
+      user_id: 1,
+    },
+    include: {
+      model: db.score,
+    },
   });
-  return res.status(200).json(patterns);
+  return res.status(200).json({ user, patterns });
 });
 
 app.post("/login", async (req, res) => {

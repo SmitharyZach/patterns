@@ -13,7 +13,9 @@ module.exports = (sequelize, DataTypes) => {
         as: "patterns",
         foreignKey: "user_id",
       });
-      models.pattern.hasMany(models.score);
+      models.pattern.hasMany(models.score, {
+        foreignKey: "pattern_id",
+      });
     }
   }
   pattern.init(
