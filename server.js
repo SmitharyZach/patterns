@@ -57,10 +57,11 @@ app.engine(
 app.use(express.static(__dirname + "/public"));
 
 app.get("/", async (req, res) => {
-  const user = await findUserById(1);
+  const user = await findUserById(req.session.id);
+
   const patterns = await db.pattern.findAll({
     where: {
-      user_id: 1,
+      user_id: user.id,
     },
     include: {
       model: db.score,
