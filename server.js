@@ -6,6 +6,7 @@ const session = require("express-session");
 const app = express();
 const port = 3000;
 const db = require("./database/models");
+const bodyParser = require("body-parser");
 
 //password authentication
 
@@ -24,14 +25,15 @@ const findUser = async (name) =>
 const findUserById = async (id) => await db.user.findOne({ where: { id: id } });
 
 const sessionChecker = (req, res, next) => {
-  if (!req.session.id) {
-    return res.json("Must be logged in to view page");
+  if (req) {
+    res.render("signup");
   } else {
     next();
   }
 };
 
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   session({
     secret: "tacoCat",
@@ -56,7 +58,7 @@ app.engine(
 
 app.use(express.static(__dirname + "/public"));
 
-app.get("/", async (req, res) => {
+app.get("/", sessionChecker, async (req, res) => {
   const user = await findUserById(req.session.id);
 
   const patterns = await db.pattern.findAll({
@@ -94,6 +96,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/signup", async (req, res) => {
+  console.log(req.body);
   // ensure all required fields are sent
   if (!req.body.username || !req.body.password) {
     return res.status(400).json("Must provide username and password");
@@ -116,10 +119,44 @@ app.post("/signup", async (req, res) => {
       password: pword,
     })
     .then((user) => {
+      req.session.id = user.id;
       return res.json(user);
     });
 });
 
+// create pattern
+app.post("/pattern", (req, res) => {
+  //TODO change user ID to grab from session
+
+  if (!req.body.name || !req.body.description) {
+    return res.status(400).json("Must provide name and description");
+  }
+  let pattern = req.body;
+
+  db.pattern
+    .create(pattern)
+    .then((newPattern) => res.status(200).json(newPattern))
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
+
+// delete pattern
+app.delete("/pattern", (req, res) => {
+  // delete post by id
+  db.pattern
+    .destroy({
+      where: {
+        id: req.body.id,
+      },
+    })
+    .then((data) => {
+      res.status(200).json("Successful deletion!");
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
 app.listen(port, () => {
   console.log("servin runnin WILD");
 });
