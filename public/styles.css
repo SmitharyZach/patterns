@@ -343,6 +343,12 @@ form.sign-in-form {
   }
 }
 
+h1,
+h3,
+p {
+  color: black;
+}
+
 @media (max-width: 570px) {
   form {
     padding: 0 1.5rem;
