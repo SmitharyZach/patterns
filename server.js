@@ -10,9 +10,15 @@ const signup = require("./routes/signup.js");
 const findUserById = async (id) => await db.user.findOne({ where: { id: id } });
 
 const sessionChecker = (req, res, next) => {
-  console.log(req.session);
-  if (!req.session.id) {
-    res.render("signup");
+  console.log(req.session.userid);
+  if (!req.session.userid) {
+    res.render("signup", {
+      title: "Log in",
+      route: "login",
+      message: "Want to join Patterns?",
+      reverseRoute: "signup",
+      reverseTitle: "Sign up",
+    });
   } else {
     next();
   }
@@ -44,8 +50,9 @@ app.engine(
 
 app.use(express.static(__dirname + "/public"));
 app.use("/", signup);
+
 app.get("/", sessionChecker, async (req, res) => {
-  const user = await findUserById(req.session.id);
+  const user = await findUserById(req.session.userid);
   const patterns = await db.pattern.findAll({
     where: {
       user_id: user.id,
@@ -54,7 +61,11 @@ app.get("/", sessionChecker, async (req, res) => {
       model: db.score,
     },
   });
-  return res.status(200).json({ user, patterns });
+  res.render("user-landing", {
+    layout: "userlayout",
+    user: user,
+    patterns: patterns,
+  });
 });
 
 // create pattern
