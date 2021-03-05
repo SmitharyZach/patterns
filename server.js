@@ -50,6 +50,7 @@ app.engine(
 
 app.use(express.static(__dirname + "/public"));
 app.use("/", signup);
+
 app.get("/", sessionChecker, async (req, res) => {
   const user = await findUserById(req.session.userid);
   const patterns = await db.pattern.findAll({
@@ -60,7 +61,11 @@ app.get("/", sessionChecker, async (req, res) => {
       model: db.score,
     },
   });
-  return res.status(200).json({ user, patterns });
+  res.render("user-landing", {
+    layout: "userlayout",
+    user: user,
+    patterns: patterns,
+  });
 });
 
 // create pattern
