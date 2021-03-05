@@ -2,7 +2,7 @@
 
 <body>
     <nav>
-        <div class="logo"><h1>Patterns</h1></div>
+        <div class="logo"><h1>Welcome {{user.username}}</h1></div>
         <div class="openMenu"><i class="fa fa-bars"></i></div>
         
         <ul class="mainMenu">
@@ -10,34 +10,55 @@
             <li><a href="#">Plan of Action</a></li>
             <li><a href="#">Reflections</a></li>
             <div class="closeMenu"><i class="fa fa-times"></i></div>
-            <span class="icons">
-                <i class="fab fa-facebook"></i>
-            </span>
             </ul>   
     </nav>
 
-   
-<small><i><a href="/quote_of_the_day" target="_blank" rel="nofollow">more Quotes</a></i></small>
+<center> <script type="text/javascript" src="https://www.brainyquote.com/link/quotebr.js"></script>  
+<small><i><a href="/quote_of_the_day" target="_blank" rel="nofollow">more Quotes</a></i></small></center>
 
 <div class="container">
-  <h1>Patterns</h1> 
-  </div>
+  <h1>Patterns</h1>
+
+</div>
+  
   <button id="export-btn" class="btn btn-primary">Add Habit</button>
   <p id="export"></p>
 </div>
-  
   <div id="table" class="table-editable">
     <span class="table-add glyphicon glyphicon-plus"></span>
     <table class="table">
       <tr>
         <th>Habit</th>
-        <th>Value</th>
+        <th><table style="width:900px">
+
+
+<tr>
+<th>Sun</th>
+<th>Mon</th>
+<th>Tue</th>
+<th>Wed</th>
+<th>Thu</th>
+<th>Fri</th>
+<th>Sat</th>
+</tr>
+
+<tr>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+</tr>
+
+</table></th>
         <th></th>
         <th></th>
       </tr>
       <tr>
-        <td contenteditable="true">Stir Fry</td>
-        <td contenteditable="true">stir-fry</td>
+        <td contenteditable="true">Meditate Daily</td>
+        <td contenteditable="true">C</td>
         <td>
           <span class="table-remove glyphicon glyphicon-remove"></span>
         </td>
@@ -59,10 +80,10 @@
         </td>
       </tr>
     </table>
+
   
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-    <script type="text/javascript" src="https://www.brainyquote.com/link/quotebr.js"></script>
 <script>const mainMenu = document.querySelector('.mainMenu');
 const closeMenu = document.querySelector('.closeMenu');
 const openMenu = document.querySelector('.openMenu');

@@ -52,7 +52,7 @@ router.post("/signup", async (req, res) => {
       password: pword,
     })
     .then((user) => {
-      req.session.id = user.id;
+      req.session.userid = foundUser.id;
       return res.json(user);
     });
 });
@@ -78,7 +78,7 @@ router.post("/login", async (req, res) => {
     let pass_parts = pWord.split("$");
     let encryptedPass = encryptPassword(req.body.password, pass_parts[1]);
     if (encryptedPass == pWord) {
-      req.session.id = foundUser.id;
+      req.session.userid = foundUser.id;
       console.log(session);
       return res.json(`Correct password! welcome ${user}`);
     } else {
