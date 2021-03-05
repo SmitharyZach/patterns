@@ -55,11 +55,14 @@ app.engine(
 app.use(express.static(__dirname + "/public"));
 
 app.get("/", async (req, res) => {
-  let patterns = await db.user.findAll({
-    where: { id: req.session.id },
-    include: [{ model: db.pattern }],
-  });
-  return res.status(200).json(patterns);
+  //let patterns = await db.user.findAll({
+   // where: { id: req.session.id },
+  //  include: [{ model: db.pattern }],
+  //});
+  //return res.status(200).json(patterns);
+  res.render("user-landing", {
+    layout: "userlayout",
+  })
 });
 
 app.post("/login", async (req, res) => {
