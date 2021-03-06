@@ -4,6 +4,7 @@ const crypto = require("crypto");
 const session = require("express-session");
 const router = express.Router();
 const db = require("../database/models");
+const { readdirSync } = require("fs");
 router.use(express.json());
 
 const encryptPassword = (word, pass_salt) => {
@@ -15,17 +16,31 @@ const encryptPassword = (word, pass_salt) => {
   return `$${salt}$${hash}`;
 };
 
-const findUser = async (name) =>
-  await db.user.findOne({ where: { username: name } });
+const sessionChecker = (req, res, next) => {
+  console.log(req.session.userid);
+  if (!req.session.userid) {
+    res.render("signup");
+  } else {
+    next();
+  }
+};
 
-router.get("/signup", (req, res) => {
-  res.render("signup", {
-    title: "Sign up",
-    route: "signup",
-    message: "Already a member?",
-    reverseRoute: "login",
-    reverseTitle: "Log in",
-  });
+const findUser = async (name) =>
+  await db.user
+    .findOne({ where: { username: name } })
+    .then(function (userData) {
+      if (userData) {
+        return userData.toJSON();
+      } else {
+        return null;
+      }
+    });
+
+router.get("/signup", sessionChecker, (req, res) => {
+  if (req.session.id) {
+    res.redirect("/");
+  }
+  res.render("signup");
 });
 
 router.post("/signup", async (req, res) => {
@@ -51,27 +66,41 @@ router.post("/signup", async (req, res) => {
       username: user,
       password: pword,
     })
-    .then((user) => {
-      req.session.userid = foundUser.id;
-      return res.json(user);
+    .then((createdUser) => {
+      return createdUser.toJSON();
+    })
+    .then(async (user) => {
+      req.session.userid = user.id;
+      const patterns = await db.pattern.findAll({
+        where: {
+          user_id: user.id,
+        },
+        include: {
+          model: db.score,
+        },
+      });
+      res.render("user-landing", {
+        layout: "userlayout",
+        user: user,
+        patterns: patterns,
+      });
     });
 });
 
-router.get("/login", (req, res) => {
-  res.render("signup", {
-    title: "Log in",
-    route: "login",
-    message: "Want to join Patterns?",
-    reverseRoute: "signup",
-    reverseTitle: "Sign up",
-  });
+router.get("/login", sessionChecker, async (req, res) => {
+  if (req.session.id) {
+    res.redirect("/");
+  }
+  res.render("signup");
 });
 router.post("/login", async (req, res) => {
+  console.log(req.body);
   if (!req.body.username || !req.body.password) {
     return res.status(400).json("Must provide username and password");
   }
   const user = req.body.username.toLowerCase();
   const foundUser = await findUser(user);
+  console.log("found user", foundUser);
   const pWord = foundUser.password;
 
   if (foundUser) {
@@ -80,7 +109,19 @@ router.post("/login", async (req, res) => {
     if (encryptedPass == pWord) {
       req.session.userid = foundUser.id;
       console.log(session);
-      return res.json(`Correct password! welcome ${user}`);
+      const patterns = await db.pattern.findAll({
+        where: {
+          user_id: foundUser.id,
+        },
+        include: {
+          model: db.score,
+        },
+      });
+      res.render("user-landing", {
+        layout: "userlayout",
+        user: foundUser,
+        patterns: patterns,
+      });
     } else {
       return res.status(400).json("Wrong Password");
     }

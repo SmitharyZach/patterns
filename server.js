@@ -7,20 +7,15 @@ const db = require("./database/models");
 const bodyParser = require("body-parser");
 const signup = require("./routes/signup.js");
 
-const findUserById = async (id) => await db.user.findOne({ where: { id: id } }).then(function(userData){
-   return(userData.toJSON());
-})
+const findUserById = async (id) =>
+  await db.user.findOne({ where: { id: id } }).then(function (userData) {
+    return userData.toJSON();
+  });
 
 const sessionChecker = (req, res, next) => {
   console.log(req.session.userid);
   if (!req.session.userid) {
-    res.render("signup", {
-      title: "Log in",
-      route: "login",
-      message: "Want to join Patterns?",
-      reverseRoute: "signup",
-      reverseTitle: "Sign up",
-    });
+    res.redirect("/login");
   } else {
     next();
   }
@@ -64,7 +59,7 @@ app.get("/", sessionChecker, async (req, res) => {
       model: db.score,
     },
   });
-console.log(user)
+  console.log(user);
   res.render("user-landing", {
     layout: "userlayout",
     user: user,
