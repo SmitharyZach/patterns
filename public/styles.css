@@ -346,7 +346,7 @@ form.sign-in-form {
 h1,
 h3,
 p {
-  color: black;
+  color: white;
 }
 
 @media (max-width: 570px) {
