@@ -19,10 +19,31 @@
 <div class="container">
   <h1>Patterns</h1>
 
-</div>
-  
-  <button id="export-btn" class="btn btn-primary">Add Habit</button>
-  <p id="export"></p>
+
+<div class="container">
+  <!-- Trigger the modal with a button -->
+  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Habit</button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Edit Habit</h4>
+        </div>
+        <div class="modal-body">
+          <p>Type Habit</p>
+          <p>Habit Message</p>
+          <p>Repeat</p>
+          <p>Reminder</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Discard</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
   <div id="table" class="table-editable">
@@ -35,15 +56,13 @@
         <th></th>
       </tr>
       <tr>
-        <td contenteditable="true">Meditate Daily</td>
-        <td contenteditable="true">C</td>
+        <td contenteditable="false">Meditate Daily</td>
+        <td contenteditable="false"> 
+    
         <td>
           <span class="table-remove glyphicon glyphicon-remove"></span>
         </td>
-        <td>
-          <span class="table-up glyphicon glyphicon-arrow-up"></span>
-          <span class="table-down glyphicon glyphicon-arrow-down"></span>
-        </td>
+        
       </tr>
       <!-- This is our clonable table line -->
       <tr class="hide">
@@ -52,10 +71,7 @@
         <td>
           <span class="table-remove glyphicon glyphicon-remove"></span>
         </td>
-        <td>
-          <span class="table-up glyphicon glyphicon-arrow-up"></span>
-          <span class="table-down glyphicon glyphicon-arrow-down"></span>
-        </td>
+    
       </tr>
     </table>
 
@@ -90,17 +106,6 @@ $('.table-remove').click(function () {
   $(this).parents('tr').detach();
 });
 
-$('.table-up').click(function () {
-  var $row = $(this).parents('tr');
-  if ($row.index() === 1) return; // Don't go above the header
-  $row.prev().before($row.get(0));
-});
-
-$('.table-down').click(function () {
-  var $row = $(this).parents('tr');
-  $row.next().after($row.get(0));
-});
-
 // A few jQuery helpers for exporting only
 jQuery.fn.pop = [].pop;
 jQuery.fn.shift = [].shift;
@@ -129,7 +134,7 @@ $BTN.click(function () {
   });
   
   // Output the result
-  $EXPORT.text(JSON.stringify(data));
+  //$EXPORT.text(JSON.stringify(data));
 }); 
 
 </script>
