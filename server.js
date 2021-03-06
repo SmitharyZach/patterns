@@ -7,7 +7,9 @@ const db = require("./database/models");
 const bodyParser = require("body-parser");
 const signup = require("./routes/signup.js");
 
-const findUserById = async (id) => await db.user.findOne({ where: { id: id } });
+const findUserById = async (id) => await db.user.findOne({ where: { id: id } }).then(function(userData){
+   return(userData.toJSON());
+})
 
 const sessionChecker = (req, res, next) => {
   console.log(req.session.userid);
@@ -49,6 +51,7 @@ app.engine(
 );
 
 app.use(express.static(__dirname + "/public"));
+
 app.use("/", signup);
 
 app.get("/", sessionChecker, async (req, res) => {
@@ -61,6 +64,7 @@ app.get("/", sessionChecker, async (req, res) => {
       model: db.score,
     },
   });
+console.log(user)
   res.render("user-landing", {
     layout: "userlayout",
     user: user,
