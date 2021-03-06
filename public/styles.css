@@ -118,7 +118,7 @@ form.sign-in-form {
 }
 
 .btn:hover {
-  background-color: #4d84e2;
+  background-color: #4d8b5a;
 }
 .panels-container {
   position: absolute;
@@ -372,11 +372,5 @@ p {
   .container.sign-up-mode:before {
     bottom: 28%;
     left: 50%;
-  }
-  #footer {
-    display: table;
-    text-align: center;
-    margin-left: center;
-    margin-right: center;
   }
 }
