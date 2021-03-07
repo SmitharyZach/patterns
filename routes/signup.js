@@ -69,22 +69,7 @@ router.post("/signup", async (req, res) => {
     .then((createdUser) => {
       return createdUser.toJSON();
     })
-    .then(async (user) => {
-      req.session.userid = user.id;
-      const patterns = await db.pattern.findAll({
-        where: {
-          user_id: user.id,
-        },
-        include: {
-          model: db.score,
-        },
-      });
-      res.render("user-landing", {
-        layout: "userlayout",
-        user: user,
-        patterns: patterns,
-      });
-    });
+    .then(res.redirect("/"));
 });
 
 router.get("/login", sessionChecker, async (req, res) => {
@@ -108,20 +93,7 @@ router.post("/login", async (req, res) => {
     let encryptedPass = encryptPassword(req.body.password, pass_parts[1]);
     if (encryptedPass == pWord) {
       req.session.userid = foundUser.id;
-      console.log(session);
-      const patterns = await db.pattern.findAll({
-        where: {
-          user_id: foundUser.id,
-        },
-        include: {
-          model: db.score,
-        },
-      });
-      res.render("user-landing", {
-        layout: "userlayout",
-        user: foundUser,
-        patterns: patterns,
-      });
+      res.redirect("/");
     } else {
       return res.status(400).json("Wrong Password");
     }
