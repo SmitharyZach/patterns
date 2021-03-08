@@ -67,23 +67,10 @@ router.post("/signup", async (req, res) => {
       password: pword,
     })
     .then((createdUser) => {
-      return createdUser.toJSON();
-    })
-    .then(async (user) => {
-      req.session.userid = user.id;
-      const patterns = await db.pattern.findAll({
-        where: {
-          user_id: user.id,
-        },
-        include: {
-          model: db.score,
-        },
-      });
-      res.render("user-landing", {
-        layout: "userlayout",
-        user: user,
-        patterns: patterns,
-      });
+      let jsonUser = createdUser.toJSON();
+      console.log("created user", jsonUser.id);
+      req.session.userid = jsonUser.id;
+      res.redirect("/");
     });
 });
 
@@ -108,26 +95,18 @@ router.post("/login", async (req, res) => {
     let encryptedPass = encryptPassword(req.body.password, pass_parts[1]);
     if (encryptedPass == pWord) {
       req.session.userid = foundUser.id;
-      console.log(session);
-      const patterns = await db.pattern.findAll({
-        where: {
-          user_id: foundUser.id,
-        },
-        include: {
-          model: db.score,
-        },
-      });
-      res.render("user-landing", {
-        layout: "userlayout",
-        user: foundUser,
-        patterns: patterns,
-      });
+      res.redirect("/");
     } else {
       return res.status(400).json("Wrong Password");
     }
   } else {
     return res.status(400).json("No user found");
   }
+});
+
+router.get("/login/destroy", (req, res) => {
+  req.session.destroy();
+  res.redirect("/login");
 });
 
 module.exports = router;

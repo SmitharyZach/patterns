@@ -1,141 +1,126 @@
-
-
 <body>
-    <nav>
-        <div class="logo"><h1>Welcome {{user.username}}</h1></div>
-        <div class="openMenu"><i class="fa fa-bars"></i></div>
-        
-        <ul class="mainMenu">
-            <li><a href="#">Completion</a></li>
-            <li><a href="#">Plan of Action</a></li>
-            <li><a href="#">Reflections</a></li>
-            <div class="closeMenu"><i class="fa fa-times"></i></div>
-            </ul>   
-    </nav>
+  <nav>
+    <div class="logo">
+      <h1>Welcome {{user.username}}</h1>
+    </div>
+    <div class="openMenu"><i class="fa fa-bars"></i></div>
+    <ul class="mainMenu">
+      <li><a href="/login/destroy">Log out</a></li>
+      <div class="closeMenu"><i class="fa fa-times"></i></div>
+    </ul>
+  </nav>
 
-<center> <script type="text/javascript" src="https://www.brainyquote.com/link/quotebr.js"></script>  
-<small><i><a href="/quote_of_the_day" target="_blank" rel="nofollow">more Quotes</a></i></small></center>
+  <center>
+    <script type="text/javascript" src="https://www.brainyquote.com/link/quotebr.js"></script>
+  </center>
 
-<div class="container">
-  <h1>Patterns</h1>
+  <div class="container">
+    <div class="row">
+      <h1 class="col logo">Patterns</h1>
 
-
-<div class="container">
-  <!-- Trigger the modal with a button -->
-  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Habit</button>
-
-  <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Edit Habit</h4>
-        </div>
-        <div class="modal-body">
-          <p>Type Habit</p>
-          <p>Habit Message</p>
-          <p>Repeat</p>
-          <p>Reminder</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Discard</button>
+      <!-- Trigger the modal with a button -->
+      <button type="button" class="btn btn-info btn-lg col-2" data-toggle="modal" data-target="#myModal">Add
+      </button>
+    </div>
+    <table class="table table-responsive-sm">
+      <thead class="thread">
+        <tr>
+          <th scope="col">Pattern</th>
+          <th scope="col">Description</th>
+          <th scope="col">{{yesterday3}}</th>
+          <th scope="col">{{yesterday2}}</th>
+          <th scope="col">{{yesterday}}</th>
+          <th scope="col">Today</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each patterns}}
+        <tr>
+          <td>{{name}}</td>
+          <td>{{description}}</td>
+          <td class="dateColumn">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" disabled {{#if
+                dateObject.yesterday3}}checked{{/if}}>
+              <label class="form-check-label" for="flexCheckChecked">
+              </label>
+          </td>
+          <td class="dateColumn">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" disabled {{#if
+                dateObject.yesterday2}}checked{{/if}}>
+              <label class="form-check-label" for="flexCheckChecked">
+              </label>
+          </td>
+          <td class="dateColumn">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" disabled {{#if
+                dateObject.yesterday}}checked{{/if}}>
+              <label class="form-check-label" for="flexCheckChecked">
+              </label>
+          </td>
+          <td class="dateColumn">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="{{id}}" {{#if
+                dateObject.today}}checked{{/if}}>
+              <label class="form-check-label" for="flexCheckChecked">
+              </label>
+          </td>
+          {{/each}}
+        </tr>
+      </tbody>
+    </table>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add new pattern!</h5>
+          </div>
+          <div class="modal-body">
+            <form action="/patterns" method="POST">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Name</label>
+                <input type="text" class="form-control" id="name" aria-describedby="name" name="name"
+                  placeholder="name">
+                <small id="emailHelp" class="form-text text-muted">A pattern you'll complete every day</small>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Description</label>
+                <textarea class="form-control" id="description" rows="3" name="description"
+                  aria-describedby="description" placeholder="description"></textarea>
+                <small id="description" class="form-text text-muted">Describe the pattern, what will make this pattern
+                  complete?</small>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Exit</button>
+                <button type="submit" class="btn btn-secondary">Create</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-
-  <div id="table" class="table-editable">
-    <span class="table-add glyphicon glyphicon-plus"></span>
-    <table class="table">
-      <tr>
-        <th>Habit</th>
-        <th></th>
-        <th></th>
-        <th></th>
-      </tr>
-      <tr>
-        <td contenteditable="false">Meditate Daily</td>
-        <td contenteditable="false"> 
-    
-        <td>
-          <span class="table-remove glyphicon glyphicon-remove"></span>
-        </td>
-        
-      </tr>
-      <!-- This is our clonable table line -->
-      <tr class="hide">
-        <td contenteditable="true">Untitled</td>
-        <td contenteditable="true">undefined</td>
-        <td>
-          <span class="table-remove glyphicon glyphicon-remove"></span>
-        </td>
-    
-      </tr>
-    </table>
-
-  
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-<script>const mainMenu = document.querySelector('.mainMenu');
-const closeMenu = document.querySelector('.closeMenu');
-const openMenu = document.querySelector('.openMenu');
-
-openMenu.addEventListener('click',show);
-closeMenu.addEventListener('click',close);
-
-function show(){
-    mainMenu.style.display = 'flex';
-    mainMenu.style.top = '0';
-}
-function close(){
-    mainMenu.style.top = '-100%';
-}
-
-var $TABLE = $('#table');
-var $BTN = $('#export-btn');
-var $EXPORT = $('#export');
-
-$('.table-add').click(function () {
-  var $clone = $TABLE.find('tr.hide').clone(true).removeClass('hide table-line');
-  $TABLE.find('table').append($clone);
-});
-
-$('.table-remove').click(function () {
-  $(this).parents('tr').detach();
-});
-
-// A few jQuery helpers for exporting only
-jQuery.fn.pop = [].pop;
-jQuery.fn.shift = [].shift;
-
-$BTN.click(function () {
-  var $rows = $TABLE.find('tr:not(:hidden)');
-  var headers = [];
-  var data = [];
-  
-  // Get the headers (add special header logic here)
-  $($rows.shift()).find('th:not(:empty)').each(function () {
-    headers.push($(this).text().toLowerCase());
-  });
-  
-  // Turn all existing rows into a loopable array
-  $rows.each(function () {
-    var $td = $(this).find('td');
-    var h = {};
-    
-    // Use the headers from earlier to name our hash keys
-    headers.forEach(function (header, i) {
-      h[header] = $td.eq(i).text();   
-    });
-    
-    data.push(h);
-  });
-  
-  // Output the result
-  //$EXPORT.text(JSON.stringify(data));
-}); 
-
-</script>
+    <script>
+      const $checkboxes = $("input[type='checkbox']")
+      console.log($checkboxes)
+      $checkboxes.change(function () {
+        let patternid = this.id
+        if (this.checked) {
+          console.log(this.id)
+          $.post("/pattern/score", {
+            id: patternid
+          }).done(function (data) {
+            console.log("done", data)
+          })
+        } else {
+          let patternid = this.id
+          $.post("/pattern/score/delete", {
+            id: patternid
+          }).done(function (data) {
+            console.log("done", data)
+          })
+        }
+      })
+    </script>
 </body>

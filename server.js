@@ -6,12 +6,56 @@ const port = 3000;
 const db = require("./database/models");
 const bodyParser = require("body-parser");
 const signup = require("./routes/signup.js");
+const patterns = require("./routes/patterns");
+const scores = require("./routes/scores");
 
 const findUserById = async (id) =>
   await db.user.findOne({ where: { id: id } }).then(function (userData) {
     return userData.toJSON();
   });
 
+const findPattern = async (id) =>
+  await db.pattern
+    .findAll({
+      where: {
+        user_id: id,
+      },
+      include: {
+        model: db.score,
+      },
+    })
+    .then((results) => {
+      let patterns = results.map((pattern) => pattern.toJSON());
+      return patterns;
+    });
+
+const getDateWithOffset = (opp, offset) => {
+  let d = new Date();
+  if (!offset) {
+    let day = d.getDate();
+    let month = d.getMonth() + 1;
+    let year = d.getFullYear();
+    return `${month}/${day}/${year}`;
+  } else if (opp == "-") {
+    let day = d.getDate() - offset;
+    let month = d.getMonth() + 1;
+    let year = d.getFullYear();
+    return `${month}/${day}/${year}`;
+  } else {
+    let day = d.getDate() + offset;
+    let month = d.getMonth() + 1;
+    let year = d.getFullYear();
+    return `${month}/${day}/${year}`;
+  }
+};
+
+const setDateFormat = (date) => {
+  let d = new Date(date);
+  let day = d.getDate();
+  let month = d.getMonth() + 1;
+  let year = d.getFullYear();
+  return `${month}/${day}/${year}`;
+};
 const sessionChecker = (req, res, next) => {
   console.log(req.session.userid);
   if (!req.session.userid) {
@@ -48,58 +92,49 @@ app.engine(
 app.use(express.static(__dirname + "/public"));
 
 app.use("/", signup);
+app.use("/", patterns);
+app.use("/", scores);
 
 app.get("/", sessionChecker, async (req, res) => {
+  const today = getDateWithOffset();
+  const yesterday = getDateWithOffset("-", 1);
+  const yesterday2 = getDateWithOffset("-", 2);
+  const yesterday3 = getDateWithOffset("-", 3);
   const user = await findUserById(req.session.userid);
-  const patterns = await db.pattern.findAll({
-    where: {
-      user_id: user.id,
-    },
-    include: {
-      model: db.score,
-    },
+  const patterns = await findPattern(req.session.userid);
+
+  patterns.forEach((pattern) => {
+    pattern.dateObject = {
+      today: false,
+      yesterday: false,
+      yesterday2: false,
+      yesterday3: false,
+    };
+    pattern.scores.forEach((score) => {
+      let createdAtDate = setDateFormat(score.createdAt);
+      if (createdAtDate == today) {
+        pattern.dateObject.today = true;
+      } else if (createdAtDate == yesterday) {
+        pattern.dateObject.yesterday = true;
+      } else if (createdAtDate == yesterday2) {
+        pattern.dateObject.yesterday2 = true;
+      } else if (createdAtDate == yesterday3) {
+        pattern.dateObject.yesterday3 = true;
+      }
+    });
   });
-  console.log(user);
+
   res.render("user-landing", {
     layout: "userlayout",
     user: user,
     patterns: patterns,
+    yesterday: yesterday,
+    yesterday2: yesterday2,
+    yesterday3: yesterday3,
+    today: today,
   });
 });
 
-// create pattern
-app.post("/pattern", (req, res) => {
-  //TODO change user ID to grab from session
-
-  if (!req.body.name || !req.body.description) {
-    return res.status(400).json("Must provide name and description");
-  }
-  let pattern = req.body;
-
-  db.pattern
-    .create(pattern)
-    .then((newPattern) => res.status(200).json(newPattern))
-    .catch((err) => {
-      res.status(400).json(err);
-    });
-});
-
-// delete pattern
-app.delete("/pattern", (req, res) => {
-  // delete post by id
-  db.pattern
-    .destroy({
-      where: {
-        id: req.body.id,
-      },
-    })
-    .then((data) => {
-      res.status(200).json("Successful deletion!");
-    })
-    .catch((err) => {
-      res.status(400).json(err);
-    });
-});
 app.listen(port, () => {
   console.log("servin runnin WILD");
 });
