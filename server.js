@@ -105,13 +105,16 @@ app.get("/", sessionChecker, async (req, res) => {
 
   patterns.forEach((pattern) => {
     pattern.dateObject = {
+      today: false,
       yesterday: false,
       yesterday2: false,
       yesterday3: false,
     };
     pattern.scores.forEach((score) => {
       let createdAtDate = setDateFormat(score.createdAt);
-      if (createdAtDate == yesterday) {
+      if (createdAtDate == today) {
+        pattern.dateObject.today = true;
+      } else if (createdAtDate == yesterday) {
         pattern.dateObject.yesterday = true;
       } else if (createdAtDate == yesterday2) {
         pattern.dateObject.yesterday2 = true;
