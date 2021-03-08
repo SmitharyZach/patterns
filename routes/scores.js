@@ -7,9 +7,9 @@ router.post("/pattern/:id/score", (req, res) => {
   db.score
     .create({
       score: true,
-      pattern_id: 8,
-      createdAt: new Date() - 2,
-      updatedAt: new Date() - 2,
+      pattern_id: 5,
+      createdAt: new Date("3/5/2021"),
+      updatedAt: new Date("3/5/2021"),
     })
     .then((score) => {
       return res.status(200).json(score);

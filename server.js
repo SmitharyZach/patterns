@@ -35,18 +35,26 @@ const getDateWithOffset = (opp, offset) => {
     let day = d.getDate();
     let month = d.getMonth() + 1;
     let year = d.getFullYear();
-    return `${day}/${month}/${year}`;
+    return `${month}/${day}/${year}`;
   } else if (opp == "-") {
     let day = d.getDate() - offset;
     let month = d.getMonth() + 1;
     let year = d.getFullYear();
-    return `${day}/${month}/${year}`;
+    return `${month}/${day}/${year}`;
   } else {
     let day = d.getDate() + offset;
     let month = d.getMonth() + 1;
     let year = d.getFullYear();
-    return `${day}/${month}/${year}`;
+    return `${month}/${day}/${year}`;
   }
+};
+
+const setDateFormat = (date) => {
+  let d = new Date(date);
+  let day = d.getDate();
+  let month = d.getMonth() + 1;
+  let year = d.getFullYear();
+  return `${month}/${day}/${year}`;
 };
 const sessionChecker = (req, res, next) => {
   console.log(req.session.userid);
@@ -94,8 +102,26 @@ app.get("/", sessionChecker, async (req, res) => {
   const yesterday3 = getDateWithOffset("-", 3);
   const user = await findUserById(req.session.userid);
   const patterns = await findPattern(req.session.userid);
-  console.log("patterns", patterns);
-  console.log(user);
+
+  patterns.forEach((pattern) => {
+    pattern.dateObject = {
+      yesterday: false,
+      yesterday2: false,
+      yesterday3: false,
+    };
+    pattern.scores.forEach((score) => {
+      let createdAtDate = setDateFormat(score.createdAt);
+      if (createdAtDate == yesterday) {
+        pattern.dateObject.yesterday = true;
+      } else if (createdAtDate == yesterday2) {
+        pattern.dateObject.yesterday2 = true;
+      } else if (createdAtDate == yesterday3) {
+        pattern.dateOject.yesterday3 = true;
+      }
+    });
+    console.log("pattern", pattern);
+  });
+
   res.render("user-landing", {
     layout: "userlayout",
     user: user,

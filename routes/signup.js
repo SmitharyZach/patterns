@@ -67,9 +67,11 @@ router.post("/signup", async (req, res) => {
       password: pword,
     })
     .then((createdUser) => {
-      return createdUser.toJSON();
-    })
-    .then(res.redirect("/"));
+      let jsonUser = createdUser.toJSON();
+      console.log("created user", jsonUser.id);
+      req.session.userid = jsonUser.id;
+      res.redirect("/");
+    });
 });
 
 router.get("/login", sessionChecker, async (req, res) => {

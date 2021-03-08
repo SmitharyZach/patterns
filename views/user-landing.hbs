@@ -42,19 +42,22 @@
           <td>{{description}}</td>
           <td class="dateColumn">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="{{id}}" disabled checked>
+              <input class="form-check-input" type="checkbox" value="" id="{{id}}" disabled {{#if
+                dateObject.yesterday3}}checked{{/if}}>
               <label class="form-check-label" for="flexCheckChecked">
               </label>
           </td>
           <td class="dateColumn">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="{{id}}" disabled>
+              <input class="form-check-input" type="checkbox" value="" id="{{id}}" disabled {{#if
+                dateObject.yesterday2}}checked{{/if}}>
               <label class="form-check-label" for="flexCheckChecked">
               </label>
           </td>
           <td class="dateColumn">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="{{id}}" disabled checked>
+              <input class="form-check-input" type="checkbox" value="" id="{{id}}" disabled {{#if
+                dateObject.yesterday}}checked{{/if}}>
               <label class="form-check-label" for="flexCheckChecked">
               </label>
           </td>
@@ -64,9 +67,8 @@
               <label class="form-check-label" for="flexCheckChecked">
               </label>
           </td>
+          {{/each}}
         </tr>
-        {{/each}}
-
       </tbody>
     </table>
     <!-- Modal -->
