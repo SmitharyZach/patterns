@@ -104,4 +104,9 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.get("/login/destroy", (req, res) => {
+  req.session.destroy();
+  res.redirect("/login");
+});
+
 module.exports = router;

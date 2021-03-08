@@ -8,7 +8,7 @@ body {
   font-family: "Arial", sans-serif;
 }
 nav {
-  background: #619464;
+  background: #837007;
   color: #fff;
   display: flex;
   justify-content: space-between;
@@ -41,29 +41,31 @@ nav .mainMenu .closeMenu,
   display: none;
   cursor: pointer;
 }
+
+h1 {
+  color: #4d8b5a;
+  font-weight: bold;
+}
+
 nav .logo {
   margin: 6px;
-  font-size: 25px;
+  font-size: 50px;
   cursor: pointer;
-  color: green;
+  font-weight: bold;
+  color: #e76f51;
 }
-nav .mainmenu .closeMenu {
-  display: block;
-  position: absolute;
-  top: 20px;
-  right: 20p;
-}
-nav .openMenu {
-  display: block;
-}
+
 nav .mainMenu li a:hover {
   background: none;
   color: #e76f51;
   font-size: 1.5rem;
 }
-.icons i {
-  display: inline-block;
-  padding: 12px;
+
+nav .mainMenu li {
+  background: none;
+  color: #e76f51;
+  font-size: 1.5rem;
+  font-size: 30px;
 }
 
 @import "compass/css3";
@@ -78,25 +80,6 @@ nav .mainMenu li a:hover {
   display: inline-block;
   font-size: 16px;
   margin: 4px 2px;
-  cursor: pointer;
-}
-
-.table-editable {
-  position: relative;
-}
-
-.glyphicon {
-  font-size: 20px;
-}
-
-.table-remove {
-  color: #700;
-  cursor: pointer;
-}
-
-.table-up,
-.table-down {
-  color: #007;
   cursor: pointer;
 }
 
@@ -123,10 +106,15 @@ input {
 .btn:hover {
   background-color: #4d8b5a;
 }
-.thread {
-  color: #4d8b5a;
-}
 
 .dateColumn {
   text-align: center;
+}
+
+nav .logo h1 {
+  margin: 6px;
+  font-size: 50px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #e76f51;
 }
