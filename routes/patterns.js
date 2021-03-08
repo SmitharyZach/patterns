@@ -24,7 +24,7 @@ router.post("/patterns", (req, res) => {
 });
 
 // delete pattern
-router.delete("/pattern", (req, res) => {
+router.post("/pattern", (req, res) => {
   // delete post by id
   db.pattern
     .destroy({
@@ -33,10 +33,10 @@ router.delete("/pattern", (req, res) => {
       },
     })
     .then((data) => {
-      res.status(200).json("Successful deletion!");
+      return res.status(200).json("Successful deletion!");
     })
     .catch((err) => {
-      res.status(400).json(err);
+      return res.status(400).json(err);
     });
 });
 

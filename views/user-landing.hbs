@@ -107,16 +107,21 @@
       const $checkboxes = $("input[type='checkbox']")
       console.log($checkboxes)
       $checkboxes.change(function () {
+        let patternid = this.id
         if (this.checked) {
           console.log(this.id)
-          let patternid = this.id
           $.post("/pattern/score", {
             id: patternid
           }).done(function (data) {
             console.log("done", data)
           })
         } else {
-          console.log('unchecked')
+          let patternid = this.id
+          $.post("/pattern/score/delete", {
+            id: patternid
+          }).done(function (data) {
+            console.log("done", data)
+          })
         }
       })
     </script>
