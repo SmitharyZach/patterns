@@ -119,10 +119,9 @@ app.get("/", sessionChecker, async (req, res) => {
       } else if (createdAtDate == yesterday2) {
         pattern.dateObject.yesterday2 = true;
       } else if (createdAtDate == yesterday3) {
-        pattern.dateOject.yesterday3 = true;
+        pattern.dateObject.yesterday3 = true;
       }
     });
-    console.log("pattern", pattern);
   });
 
   res.render("user-landing", {
