@@ -133,31 +133,6 @@
         </div>
       </div>
     </div>
-    <!-- Update Description Modal -->
-    <div class="modal fade" id="descriptionModal" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Update Description</h5>
-          </div>
-          <div class="modal-body" id='id'>
-            <form action="/patterns" method="PUT">
-              <div class="form-group">
-                <label for="description">Description</label>
-                <textarea class="form-control" id="description" rows="3" name="description"
-                  aria-describedby="description" placeholder="description"></textarea>
-                <small id="description" class="form-text text-muted">Update description, what will make this pattern
-                  complete?</small>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Exit</button>
-                <button type="submit" class="btn btn-secondary">Update</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
     <script>
       const $checkboxes = $("input[type='checkbox']")
       console.log($checkboxes)
