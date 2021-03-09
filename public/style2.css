@@ -109,6 +109,8 @@ input {
 
 .dateColumn {
   text-align: center;
+  border: 1px solid black;
+  width: 10px;
 }
 
 nav .logo h1 {
@@ -117,4 +119,16 @@ nav .logo h1 {
   cursor: pointer;
   font-weight: bold;
   color: #e76f51;
+}
+
+.checked {
+  background-color: #4d8b5a;
+}
+
+.unchecked {
+  background-color: #ec5b5b;
+}
+
+.hoverDescription:hover {
+  background-color: lightblue;
 }
