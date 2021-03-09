@@ -178,6 +178,6 @@ app.get("/", sessionChecker, async (req, res) => {
   });
 });
 
-app.listen(port, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log("servin runnin WILD");
 });

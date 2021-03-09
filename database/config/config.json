@@ -5,5 +5,21 @@
     "database": "patterns",
     "host": "localhost",
     "dialect": "postgres"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "postgres",
+    "database": "patterns",
+    "host": "localhost",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      },
+      "keepAlive": true
+    },
+    "ssl": true,
+    "use_env_variable": "DATABASE_URL"
   }
 }
