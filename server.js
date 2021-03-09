@@ -49,6 +49,24 @@ const getDateWithOffset = (opp, offset) => {
   }
 };
 
+const getDateWithOffsetNoYear = (opp, offset) => {
+  let d = new Date();
+  if (!offset) {
+    let day = d.getDate();
+    let month = d.getMonth() + 1;
+    return `${month}/${day}`;
+  } else if (opp == "-") {
+    let day = d.getDate() - offset;
+    let month = d.getMonth() + 1;
+    return `${month}/${day}`;
+  } else {
+    let day = d.getDate() + offset;
+    let month = d.getMonth() + 1;
+    let year = d.getFullYear();
+    return `${month}/${day}/${year}`;
+  }
+};
+
 const setDateFormat = (date) => {
   let d = new Date(date);
   let day = d.getDate();
@@ -56,6 +74,7 @@ const setDateFormat = (date) => {
   let year = d.getFullYear();
   return `${month}/${day}/${year}`;
 };
+
 const sessionChecker = (req, res, next) => {
   console.log(req.session.userid);
   if (!req.session.userid) {
@@ -100,6 +119,18 @@ app.get("/", sessionChecker, async (req, res) => {
   const yesterday = getDateWithOffset("-", 1);
   const yesterday2 = getDateWithOffset("-", 2);
   const yesterday3 = getDateWithOffset("-", 3);
+  const yesterday4 = getDateWithOffset("-", 4);
+  const yesterday5 = getDateWithOffset("-", 5);
+  const yesterday6 = getDateWithOffset("-", 6);
+
+  const todayFormatted = getDateWithOffsetNoYear();
+  const yesterdayFormatted = getDateWithOffsetNoYear("-", 1);
+  const twoDaysAgoFormatted = getDateWithOffsetNoYear("-", 2);
+  const threeDaysAgoFormatted = getDateWithOffsetNoYear("-", 3);
+  const fourDaysAgoFormatted = getDateWithOffsetNoYear("-", 4);
+  const fiveDaysAgoFormatted = getDateWithOffsetNoYear("-", 5);
+  const sixDaysAgoFormatted = getDateWithOffsetNoYear("-", 6);
+
   const user = await findUserById(req.session.userid);
   const patterns = await findPattern(req.session.userid);
 
@@ -109,6 +140,9 @@ app.get("/", sessionChecker, async (req, res) => {
       yesterday: false,
       yesterday2: false,
       yesterday3: false,
+      yesterday4: false,
+      yesterday5: false,
+      yesterday6: false,
     };
     pattern.scores.forEach((score) => {
       let createdAtDate = setDateFormat(score.createdAt);
@@ -120,6 +154,12 @@ app.get("/", sessionChecker, async (req, res) => {
         pattern.dateObject.yesterday2 = true;
       } else if (createdAtDate == yesterday3) {
         pattern.dateObject.yesterday3 = true;
+      } else if (createdAtDate == yesterday4) {
+        pattern.dateObject.yesterday4 = true;
+      } else if (createdAtDate == yesterday5) {
+        pattern.dateObject.yesterday5 = true;
+      } else if (createdAtDate == yesterday6) {
+        pattern.dateObject.yesterday6 = true;
       }
     });
   });
@@ -128,10 +168,13 @@ app.get("/", sessionChecker, async (req, res) => {
     layout: "userlayout",
     user: user,
     patterns: patterns,
-    yesterday: yesterday,
-    yesterday2: yesterday2,
-    yesterday3: yesterday3,
-    today: today,
+    yesterday: yesterdayFormatted,
+    yesterday2: twoDaysAgoFormatted,
+    yesterday3: threeDaysAgoFormatted,
+    yesterday4: fourDaysAgoFormatted,
+    yesterday5: fiveDaysAgoFormatted,
+    yesterday6: sixDaysAgoFormatted,
+    today: todayFormatted,
   });
 });
 

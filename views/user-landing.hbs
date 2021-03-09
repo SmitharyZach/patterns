@@ -22,11 +22,14 @@
       <button type="button" class="btn btn-info btn-lg col-2" data-toggle="modal" data-target="#myModal">Add
       </button>
     </div>
-    <table class="table table-responsive-sm">
+    <table class="table table-responsive-sm table align-middle">
       <thead class="thread">
         <tr>
           <th scope="col">Pattern</th>
           <th scope="col">Description</th>
+          <th scope="col">{{yesterday6}}</th>
+          <th scope="col">{{yesterday5}}</th>
+          <th scope="col">{{yesterday4}}</th>
           <th scope="col">{{yesterday3}}</th>
           <th scope="col">{{yesterday2}}</th>
           <th scope="col">{{yesterday}}</th>
@@ -37,32 +40,61 @@
         {{#each patterns}}
         <tr>
           <td>{{name}}</td>
-          <td>{{description}}</td>
-          <td class="dateColumn">
+          <td id="{{id}}" class="hoverDescription" data-toggle="modal" data-target="#descriptionModal"> {{description}}
+          </td>
+          <td class="dateColumn {{#if dateObject.yesterday6}}checked{{else}}unchecked
+                {{/if}}">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" disabled {{#if
-                dateObject.yesterday3}}checked{{/if}}>
+              <input class="form-check-input" type="checkbox" value="" disabled {{#if dateObject.yesterday6}}checked
+                {{/if}}>
               <label class="form-check-label" for="flexCheckChecked">
               </label>
           </td>
-          <td class="dateColumn">
+          <td class="dateColumn {{#if dateObject.yesterday5}}checked{{else}}unchecked
+                {{/if}}">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" disabled {{#if
+              <input class="form-check-input" type="checkbox" value="" disabled {{#if dateObject.yesterday5}}checked
+                {{/if}}>
+              <label class="form-check-label" for="flexCheckChecked">
+              </label>
+          </td>
+          <td class="dateColumn {{#if dateObject.yesterday4}}checked{{else}}unchecked
+                {{/if}}">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" disabled {{#if dateObject.yesterday4}}checked
+                {{/if}}>
+              <label class="form-check-label" for="flexCheckChecked">
+              </label>
+          </td>
+          <td class="dateColumn {{#if dateObject.yesterday3}}checked{{else}}unchecked
+                {{/if}}">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" disabled {{#if dateObject.yesterday3}}checked
+                {{/if}}>
+              <label class="form-check-label" for="flexCheckChecked">
+              </label>
+          </td>
+          <td class="dateColumn {{#if dateObject.yesterday2}}checked{{else}}unchecked
+                {{/if}}">
+            <div class="form-check ">
+              <input class="form-check-input checked" type="checkbox" value="" disabled {{#if
                 dateObject.yesterday2}}checked{{/if}}>
               <label class="form-check-label" for="flexCheckChecked">
               </label>
           </td>
-          <td class="dateColumn">
+          <td class="dateColumn {{#if dateObject.yesterday}}checked{{else}}unchecked
+                {{/if}}">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" disabled {{#if
-                dateObject.yesterday}}checked{{/if}}>
+              <input class="form-check-input" type="checkbox" value="" disabled {{#if dateObject.yesterday}}checked
+                {{/if}}>
               <label class="form-check-label" for="flexCheckChecked">
               </label>
           </td>
-          <td class="dateColumn">
+          <td class="dateColumn {{#if dateObject.today}}checked{{else}}unchecked
+                {{/if}}">
             <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="{{id}}" {{#if
-                dateObject.today}}checked{{/if}}>
+              <input class="form-check-input" type="checkbox" value="" id="{{id}}" {{#if dateObject.today}}checked
+                {{/if}}>
               <label class="form-check-label" for="flexCheckChecked">
               </label>
           </td>
@@ -95,6 +127,31 @@
               <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Exit</button>
                 <button type="submit" class="btn btn-secondary">Create</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Update Description Modal -->
+    <div class="modal fade" id="descriptionModal" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Update Description</h5>
+          </div>
+          <div class="modal-body" id='id'>
+            <form action="/patterns" method="PUT">
+              <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" id="description" rows="3" name="description"
+                  aria-describedby="description" placeholder="description"></textarea>
+                <small id="description" class="form-text text-muted">Update description, what will make this pattern
+                  complete?</small>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Exit</button>
+                <button type="submit" class="btn btn-secondary">Update</button>
               </div>
             </form>
           </div>
