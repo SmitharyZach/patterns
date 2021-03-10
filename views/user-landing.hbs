@@ -90,7 +90,7 @@
               <label class="form-check-label" for="flexCheckChecked">
               </label>
           </td>
-          <td class="dateColumn {{#if dateObject.today}}checked{{else}}unchecked
+          <td class="dateColumn todayColumn {{#if dateObject.today}}checked{{else}}unchecked
                 {{/if}}">
             <div class="form-check">
               <input class="form-check-input" type="checkbox" value="" id="{{id}}" {{#if dateObject.today}}checked
@@ -139,7 +139,7 @@
       $checkboxes.change(function () {
         let patternid = this.id
         if (this.checked) {
-          console.log(this.id)
+          $(this).parents("td").removeClass('unchecked').addClass('checked')
           $.post("/pattern/score", {
             id: patternid
           }).done(function (data) {
@@ -147,6 +147,7 @@
           })
         } else {
           let patternid = this.id
+          $(this).parents("td").removeClass('checked').addClass('unchecked')
           $.post("/pattern/score/delete", {
             id: patternid
           }).done(function (data) {
